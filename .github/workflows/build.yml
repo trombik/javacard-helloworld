@@ -12,6 +12,21 @@ jobs:
         with:
           submodules: true
 
+      - name: Setup environment variables for later steps
+        id: setup-env
+        run: |
+          PROJECT_ROOT=`pwd`
+          PROJECT_VENDOR_DIR="${PROJECT_ROOT}/vendor"
+          PROJECT_JC_SDK_NAME="jc305u3_kit"
+
+          echo "PROJECT_ROOT=${PROJECT_ROOT}" >> ${GITHUB_ENV}
+          echo "PROJECT_VENDOR_DIR=${PROJECT_VENDOR_DIR}" >> ${GITHUB_ENV}
+          echo "PROJECT_JC_SDK_NAME="${PROJECT_JC_SDK_NAME}" >> ${GITHUB_ENV}
+
+      - name: Show environment variables
+        run: |
+          env | sort
+
       - name: Install dependecies for Java Card SDK
         run: |
           sudo apt-get install -y --no-install-recommends procps autoconf automake libtool m4 pkg-config help2man make gcc ant automake autotools-dev wget software-properties-common maven git pcscd libpcsclite-dev opensc
@@ -36,15 +51,12 @@ jobs:
 
       - name: Build jcardsim
         run: |
-          PROJECT_ROOT=`pwd`
-          VENDOR_DIR="vendor"
-          JC_SDK_NAME="jc305u3_kit"
-          export JC_CLASSIC_HOME="${PROJECT_ROOT}/${VENDOR_DIR}/oracle_javacard_sdks/${JC_SDK_NAME}/"
-          (cd ${VENDOR_DIR}/jcardsim && mvn initialize && mvn clean install)
+          export JC_CLASSIC_HOME="${PROJECT_VENDOR_DIR}/oracle_javacard_sdks/${PROJECT_JC_SDK_NAME}/"
+          (cd ${{PROJECT_VENDOR_DIR}/jcardsim && mvn initialize && mvn clean install)
 
       - name: Build vsmartcard
         run: |
-          (cd vendor/vsmartcard/virtualsmartcard && \
+          (cd ${PROJECT_VENDOR_DIR}/vsmartcard/virtualsmartcard && \
             autoreconf --verbose --install && \
             ./configure --sysconfdir=/etc && \
             make && \
