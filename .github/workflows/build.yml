@@ -1,0 +1,65 @@
+# based on:
+# https://github.com/ANSSI-FR/SmartPGP/blob/master/.github/workflows/main.yml
+
+name: Build Java Card applet
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependecies for Java Card SDK
+        run: |
+          sudo apt-get install -y --no-install-recommends procps autoconf automake libtool m4 pkg-config help2man make gcc ant automake autotools-dev wget software-properties-common maven git pcscd libpcsclite-dev opensc
+
+      - name: Install JDK (adoptopenjdk-8-hotspot)
+        run: |
+          # XXX don't know why adoptopenjdk is used here
+          wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+          sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+          sudo apt-get update
+          sudo apt-get install --reinstall adoptopenjdk-8-hotspot
+          sudo update-java-alternatives -s adoptopenjdk-8-hotspot-amd64
+
+      - name: Install Java Card SDK
+        run: |
+          # TODO submodule oracle_javacard_sdks
+          git clone https://github.com/martinpaljak/oracle_javacard_sdks
+          mv oracle_javacard_sdks/jc304_kit/ /tmp/
+          mv oracle_javacard_sdks/jc305u3_kit/ /tmp/
+          rm -rf oracle_javacard_sdks;
+
+      - name: Clone jcardsim
+        run: |
+          # TODO submodule jcardsim
+          git config --global user.name "John Doe"
+          git clone https://github.com/licel/jcardsim
+          (cd jcardsim && git fetch origin pull/155/head:pr155 && git merge pr155 -m "AA" )
+
+      - name: Patch random
+        run: |
+          # TODO review the patch and find out why it is necessary
+          cd jcardsim && patch -p1 < ../.github/workflows/jcardsim_patches/jcardsim_random_patch && cd -;
+
+      - name: Build jcardsim
+          export JC_CLASSIC_HOME=/tmp/jc305u3_kit/
+          (cd jcardsim && mvn initialize && mvn clean install)
+
+      - name: Clone vsmartcard
+        run: |
+          # TODO submodule vsmartcard
+          git clone https://github.com/frankmorgner/vsmartcard.git;
+          (cd vsmartcard/virtualsmartcard && \
+            autoreconf --verbose --install && \
+            ./configure --sysconfdir=/etc && \
+            make && \
+            sudo make install)
+
+      - name: Restart pcscd
+        run: |
+          # TODO use service(8)
+          sudo killall pcscd && sudo pcscd -fad &>/tmp/log_pcsc & echo "PCSCD launched";
+          sleep 2;
+          cat /tmp/log_pcsc
