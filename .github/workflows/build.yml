@@ -74,3 +74,8 @@ jobs:
           sudo pcscd -fad &>/tmp/log_pcsc & echo "PCSCD launched"
           sleep 2
           cat /tmp/log_pcsc
+
+      - name: Build the applet
+        run: |
+          JC_HOME="${PROJECT_VENDOR_DIR}/oracle_javacard_sdks/${PROJECT_JC_SDK_NAME}/" ant
+          ls -alRh bin
