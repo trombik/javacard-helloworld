@@ -5,6 +5,17 @@ repository is to create a template project that can be used for Java Card
 applet projects, providing a common file system structure, and reproducible CI
 on GitHub Actions.
 
+The repository includes the following repositories as `git` `submodule` under
+`vendor` directory.
+
+* [`jcardsim`](https://github.com/licel/jcardsim)
+* [`oracle_javacard_sdks`](https://github.com/martinpaljak/oracle_javacard_sdks)
+* [`vsmartcard`](https://github.com/frankmorgner/vsmartcard)
+
+## Known issues
+
+The repository does not include source code to build (yet).
+
 ## Usage
 
 Clone (or update) the repository.
