@@ -1,3 +1,6 @@
 [submodule "vendor/oracle_javacard_sdks"]
 	path = vendor/oracle_javacard_sdks
 	url = https://github.com/martinpaljak/oracle_javacard_sdks
+[submodule "vendor/jcardsim"]
+	path = vendor/jcardsim
+	url = https://github.com/licel/jcardsim

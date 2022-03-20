@@ -25,22 +25,14 @@ jobs:
           sudo apt-get install --reinstall adoptopenjdk-8-hotspot
           sudo update-java-alternatives -s adoptopenjdk-8-hotspot-amd64
 
-      - name: Clone jcardsim
-        run: |
-          # TODO submodule jcardsim
-          git config --global user.name "John Doe"
-          git clone https://github.com/licel/jcardsim
-          (cd jcardsim && git fetch origin pull/155/head:pr155 && git merge pr155 -m "AA" )
-
       - name: Patch jcardsim
         run: |
-          # TODO review the patch and find out why it is necessary
-          (cd jcardsim && patch -p1 < ../.github/workflows/jcardsim_patches/jcardsim_random_patch)
-
+          # TODO fork jcardsim, maintain patches in the fork.
+          #
           # XXX remove dependency on ${java.home}/../lib/tools.jar, which does
           # not exist in JDK 11, see:
           # https://github.com/licel/jcardsim/pull/156
-          (cd jcardsim && patch -p1 < ../.github/workflows/jcardsim_patches/bc24ca932a24518605b3301ac974ac04f9d367e1.patch)
+          patch --directory vendor/jcardsim -p1 < .github/workflows/jcardsim_patches/bc24ca932a24518605b3301ac974ac04f9d367e1.patch
 
       - name: Build jcardsim
         run: |
@@ -48,7 +40,7 @@ jobs:
           VENDOR_DIR="vendor"
           JC_SDK_NAME="jc305u3_kit"
           export JC_CLASSIC_HOME="${PROJECT_ROOT}/${VENDOR_DIR}/oracle_javacard_sdks/${JC_SDK_NAME}/"
-          (cd jcardsim && mvn initialize && mvn clean install)
+          (cd ${VENDOR_DIR}/jcardsim && mvn initialize && mvn clean install)
 
       - name: Clone vsmartcard
         run: |
