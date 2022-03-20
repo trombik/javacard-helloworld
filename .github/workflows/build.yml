@@ -42,11 +42,9 @@ jobs:
           export JC_CLASSIC_HOME="${PROJECT_ROOT}/${VENDOR_DIR}/oracle_javacard_sdks/${JC_SDK_NAME}/"
           (cd ${VENDOR_DIR}/jcardsim && mvn initialize && mvn clean install)
 
-      - name: Clone vsmartcard
+      - name: Build vsmartcard
         run: |
-          # TODO submodule vsmartcard
-          git clone https://github.com/frankmorgner/vsmartcard.git;
-          (cd vsmartcard/virtualsmartcard && \
+          (cd vendor/vsmartcard/virtualsmartcard && \
             autoreconf --verbose --install && \
             ./configure --sysconfdir=/etc && \
             make && \
