@@ -4,3 +4,6 @@
 [submodule "vendor/jcardsim"]
 	path = vendor/jcardsim
 	url = https://github.com/licel/jcardsim
+[submodule "vendor/vsmartcard"]
+	path = vendor/vsmartcard
+	url = https://github.com/frankmorgner/vsmartcard
