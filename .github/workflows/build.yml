@@ -21,7 +21,7 @@ jobs:
 
           echo "PROJECT_ROOT=${PROJECT_ROOT}" >> ${GITHUB_ENV}
           echo "PROJECT_VENDOR_DIR=${PROJECT_VENDOR_DIR}" >> ${GITHUB_ENV}
-          echo "PROJECT_JC_SDK_NAME="${PROJECT_JC_SDK_NAME}" >> ${GITHUB_ENV}
+          echo "PROJECT_JC_SDK_NAME=${PROJECT_JC_SDK_NAME}" >> ${GITHUB_ENV}
 
       - name: Show environment variables
         run: |
