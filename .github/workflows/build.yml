@@ -66,6 +66,11 @@ jobs:
       - name: Restart pcscd
         run: |
           # TODO use service(8)
-          sudo killall pcscd && sudo pcscd -fad &>/tmp/log_pcsc & echo "PCSCD launched";
+          #
+          # XXX pcscd might be broken in Ubuntu 20.04. see
+          # https://github.com/microsoft/WSL/issues/7880
+          # https://bugs.launchpad.net/ubuntu/+source/pcsc-lite/+bug/1881142
+          sudo service pcscd stop || true
+          sudo pcscd -fad &>/tmp/log_pcsc & echo "PCSCD launched";
           sleep 2;
           cat /tmp/log_pcsc
