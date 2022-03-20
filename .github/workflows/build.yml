@@ -44,6 +44,7 @@ jobs:
           cd jcardsim && patch -p1 < ../.github/workflows/jcardsim_patches/jcardsim_random_patch && cd -;
 
       - name: Build jcardsim
+        run: |
           export JC_CLASSIC_HOME=/tmp/jc305u3_kit/
           (cd jcardsim && mvn initialize && mvn clean install)
 
