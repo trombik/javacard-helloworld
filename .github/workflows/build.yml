@@ -52,7 +52,7 @@ jobs:
       - name: Build jcardsim
         run: |
           export JC_CLASSIC_HOME="${PROJECT_VENDOR_DIR}/oracle_javacard_sdks/${PROJECT_JC_SDK_NAME}/"
-          (cd ${{PROJECT_VENDOR_DIR}/jcardsim && mvn initialize && mvn clean install)
+          (cd ${PROJECT_VENDOR_DIR}/jcardsim && mvn initialize && mvn clean install)
 
       - name: Build vsmartcard
         run: |
