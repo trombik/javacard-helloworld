@@ -3,6 +3,7 @@
 ## Build status
 
 [![Build Java Card applet](https://github.com/trombik/javacard-helloworld/actions/workflows/build.yml/badge.svg)](https://github.com/trombik/javacard-helloworld/actions/workflows/build.yml)
+[![yamllint](https://github.com/trombik/javacard-helloworld/actions/workflows/yamllint.yml/badge.svg)](https://github.com/trombik/javacard-helloworld/actions/workflows/yamllint.yml)
 
 ## Overview
 
