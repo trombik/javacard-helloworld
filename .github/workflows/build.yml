@@ -18,10 +18,12 @@ jobs:
           PROJECT_ROOT=`pwd`
           PROJECT_VENDOR_DIR="${PROJECT_ROOT}/vendor"
           PROJECT_JC_SDK_NAME="jc305u3_kit"
+          PROJECT_JDK="adoptopenjdk-8-hotspot-amd64"
 
           echo "PROJECT_ROOT=${PROJECT_ROOT}" >> ${GITHUB_ENV}
           echo "PROJECT_VENDOR_DIR=${PROJECT_VENDOR_DIR}" >> ${GITHUB_ENV}
           echo "PROJECT_JC_SDK_NAME=${PROJECT_JC_SDK_NAME}" >> ${GITHUB_ENV}
+          echo "PROJECT_JDK=${PROJECT_JDK}" >> ${GITHUB_ENV}
 
       - name: Install dependecies for Java Card SDK
         run: |
@@ -41,6 +43,9 @@ jobs:
           env | sort
           javac -version
           java -version
+
+          # show a list JDKs
+          ls -al /usr/lib/jvm
 
       - name: Patch jcardsim
         run: |
@@ -79,5 +84,7 @@ jobs:
 
       - name: Build the applet
         run: |
-          JC_HOME="${PROJECT_VENDOR_DIR}/oracle_javacard_sdks/${PROJECT_JC_SDK_NAME}/" ant
+          export JAVA_HOME="/usr/lib/jvm/${PROJECT_JDK}"
+          export JC_HOME="${PROJECT_VENDOR_DIR}/oracle_javacard_sdks/${PROJECT_JC_SDK_NAME}/"
+          ant
           ls -alRh bin
