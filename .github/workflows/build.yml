@@ -1,8 +1,12 @@
+---
+# XXX disable line-length as some shell commands need long line
+# yamllint disable rule:line-length
+
 # based on:
 # https://github.com/ANSSI-FR/SmartPGP/blob/master/.github/workflows/main.yml
 
 name: Build Java Card applet
-on: push
+on: push  # yamllint disable-line rule:truthy
 jobs:
   build:
     runs-on: ubuntu-20.04
