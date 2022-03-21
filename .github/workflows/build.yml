@@ -19,15 +19,17 @@ jobs:
           PROJECT_VENDOR_DIR="${PROJECT_ROOT}/vendor"
           PROJECT_JC_SDK_NAME="jc305u3_kit"
           PROJECT_JDK="adoptopenjdk-8-hotspot-amd64"
+          PROJECT_REQUIRED_PACKAGES="procps autoconf automake libtool m4 pkg-config help2man make gcc ant automake autotools-dev wget software-properties-common maven git pcscd libpcsclite-dev opensc"
 
           echo "PROJECT_ROOT=${PROJECT_ROOT}" >> ${GITHUB_ENV}
           echo "PROJECT_VENDOR_DIR=${PROJECT_VENDOR_DIR}" >> ${GITHUB_ENV}
           echo "PROJECT_JC_SDK_NAME=${PROJECT_JC_SDK_NAME}" >> ${GITHUB_ENV}
           echo "PROJECT_JDK=${PROJECT_JDK}" >> ${GITHUB_ENV}
+          echo "PROJECT_REQUIRED_PACKAGES=${PROJECT_REQUIRED_PACKAGES}" >> ${GITHUB_ENV}
 
       - name: Install dependecies for Java Card SDK
         run: |
-          sudo apt-get install -y --no-install-recommends procps autoconf automake libtool m4 pkg-config help2man make gcc ant automake autotools-dev wget software-properties-common maven git pcscd libpcsclite-dev opensc
+          sudo apt-get install -y --no-install-recommends ${PROJECT_REQUIRED_PACKAGES}
 
       - name: Install JDK (adoptopenjdk-8-hotspot)
         run: |
